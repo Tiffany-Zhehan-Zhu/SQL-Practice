@@ -22,3 +22,4 @@ FROM (SELECT a.num, a.company, stopa.name AS startstop, stopb.name AS endstop
                    JOIN stops stopb ON (b.stop=stopb.id)
       WHERE stopb.name='Lochend') l 
       ON (c.endstop=l.startstop)
+
