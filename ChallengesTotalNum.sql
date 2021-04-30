@@ -9,12 +9,16 @@ If more than one student created the same number of challenges and the count is 
 SELECT H.hacker_id, H.name, COUNT(C.challenge_id) AS challenges_created
 FROM Hackers H JOIN Challenges C ON H.hacker_id = C.hacker_id
 GROUP BY H.hacker_id, H.name
-HAVING challenges_created = (SELECT COUNT(C1.challenge_id) 
+HAVING 
+        /* If more than one student created the same number of challenges and the count is the maximum number of challenges created.*/
+        challenges_created = (SELECT COUNT(C1.challenge_id) 
                              FROM Hackers H1 JOIN Challenges C1 ON H1.hacker_id = C1.hacker_id
                              GROUP BY H1.hacker_id
                              ORDER BY COUNT(C1.challenge_id) DESC
                              LIMIT 1) 
-        OR challenges_created IN (SELECT challenges_total
+        OR 
+        /* ONLY one student created this number of challenges.*/
+        challenges_created IN (SELECT challenges_total
                                   FROM (SELECT H2.hacker_id, H2.name, COUNT(C2.challenge_id) AS challenges_total 
                                         FROM Hackers H2 JOIN Challenges C2 ON H2.hacker_id = C2.hacker_id
                                         GROUP BY H2.hacker_id, H2.name) AS T2
